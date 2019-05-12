@@ -3,7 +3,7 @@ const uuid = require('uuid/v4');
 const socketIdMap = new Map();
 const userIdMap = new Map();
 const wss = new WebSocket.Server({
-    port: process.env.PORT || "8080"
+    port: 8000
 });
 const request = require("request");
 
@@ -74,6 +74,7 @@ wss.on('connection', function connection(ws) {
                         json: true
                     }, function (err, response) { // Response decode
                         if (err) console.log(err);
+                        console.log(response)
                         if (response.statusCode === 200) {
                             if (socketIdMap.has(ws.uuid)) {
                                 ws.CONNECTING = true
@@ -96,8 +97,9 @@ wss.on('connection', function connection(ws) {
                             ws.close();
                         }
                         socketIdMap.forEach((value,key)=>{
+                            console.log(userIdMap.get(ws.uuid))
                             if(key != ws.uuid){
-                                value.send(JSON.stringify({action:"ONLINE",result:{status_code:"1",user:{user_id:data['user_id'],key:ws.uuid}}}))
+                                value.send(JSON.stringify({action:"ONLINE",result:{status_code:"1",user:{user_id:userIdMap.get(ws.uuid),key:ws.uuid}}}))
                             }
                         })
                     });
