@@ -3,7 +3,7 @@ const uuid = require('uuid/v4');
 const socketIdMap = new Map();
 const userIdMap = new Map();
 const wss = new WebSocket.Server({
-    port: 8000
+    port: process.env.PORT || "8080"
 });
 const request = require("request");
 
