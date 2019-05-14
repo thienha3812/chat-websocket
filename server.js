@@ -25,6 +25,10 @@ wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(message) {
         try {
             let data = JSON.parse(message)
+            //Khi người dùng thay đổi vị trí
+            if(data["action"].tostring().toLowerCase() === "onlocationchange"){
+                console.log(data)
+            }
             // Khi người dùng gửi tin nhắn
             if (data["action"].toString().toLowerCase() === "sendmessage") {
                 try{
@@ -74,7 +78,6 @@ wss.on('connection', function connection(ws) {
                         json: true
                     }, function (err, response) { // Response decode
                         if (err) console.log(err);
-                        console.log(response)
                         if (response.statusCode === 200) {
                             if (socketIdMap.has(ws.uuid)) {
                                 ws.CONNECTING = true
